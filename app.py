@@ -5,7 +5,13 @@ app = Flask(__name__)
 model = joblib.load('iris_model.pkl')
 
 # GET Data
-@app.route('/', methods=['GET'])
+
+@app.route("/")
+def start():
+    return "The ML Server is Running"
+
+
+@app.route("/index")
 def index():
     return render_template('index.html')
 
