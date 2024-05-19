@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Species Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Predict Iris Species</h1>
+        <form id="predictionForm">
+            <label for="sepal_length">Sepal Length:</label>
+            <input type="text" id="sepal_length" name="sepal_length">
+            <label for="sepal_width">Sepal Width:</label>
+            <input type="text" id="sepal_width" name="sepal_width">
+            <label for="petal_length">Petal Length:</label>
+            <input type="text" id="petal_length" name="petal_length">
+            <label for="petal_width">Petal Width:</label>
+            <input type="text" id="petal_width" name="petal_width">
+            <button type="button" onclick="predict()">Predict</button>
+        </form>
+        <p id="result"></p>
+    </div>
+    <script>
+        async function predict() {
+            const sepalLength = document.getElementById('sepal_length').value;
+            const sepalWidth = document.getElementById('sepal_width').value;
+            const petalLength = document.getElementById('petal_length').value;
+            const petalWidth = document.getElementById('petal_width').value;
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'Sepal length': sepalLength,
+                    'Sepal width': sepalWidth,
+                    'Petal length': petalLength,
+                    'Petal width': petalWidth
+                })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('result').innerText = 'Predicted Species: ' + result.predicted_species;
+            } else {
+                document.getElementById('result').innerText = 'Error: ' + result.error;
+            }
+        }
+    </script>
+</body>
+</html>
