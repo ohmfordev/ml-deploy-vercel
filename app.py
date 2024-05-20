@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
+import os
 
 app = Flask(__name__)
 model = joblib.load('iris_model.pkl')
@@ -30,4 +31,5 @@ def predict():
         return jsonify({'error': 'Prediction error: ' + str(e)}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True, port=9000)
+    port = int(os.environ.get('PORT', 9000))
+    app.run(host='0.0.0.0', port=port)
